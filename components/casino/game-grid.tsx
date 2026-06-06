@@ -28,12 +28,12 @@ const games = [
     link: "https://lkeh.pro/2011fa",
   },
   {
-    title: "AVIATOR",
+    title: "PENALTY",
     tag: "TOP" as const,
     buttonText: "JOIN NOW",
-    imageSrc: "/aviator.mp4",
+    imageSrc: "/penalty1.mp4",
     profit: "+$8,750",
-    link: "https://lkeh.pro/85eb1b",
+    link: "https://lkiv.cc/393f66",
   },
 ]
 

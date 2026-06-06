@@ -104,7 +104,7 @@ export function LiveStatusBar() {
 </div>
       </div>
 
-      <div className="flex items-center justify-center gap-1.5 px-2 py-2 rounded-xl bg-[oklch(0.1_0.02_150)] border border-amber-500/20 min-w-0">
+      <div className="flex items-center justify-center gap-1.5 px-2 py-2 rounded-md bg-[oklch(0.1_0.02_150)] border border-amber-500/20 min-w-0">
         <Users className="w-4 h-4 text-emerald-400 shrink-0" />
         <div className="flex flex-col items-center min-w-0">
           <span className="text-[8px] text-zinc-500 uppercase leading-none whitespace-nowrap">

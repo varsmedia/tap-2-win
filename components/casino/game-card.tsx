@@ -97,8 +97,6 @@ export function GameCard({ title, tag, buttonText, imageSrc, link }: GameCardPro
 
             <a
   href={link}
-  target="_blank"
-  rel="noopener noreferrer"
   className={`mt-2 block w-full py-2.5 rounded-xl bg-gradient-to-r from-amber-600 via-yellow-500 to-amber-600 text-black text-xs font-black uppercase tracking-widest text-center hover:from-amber-500 hover:via-yellow-400 hover:to-amber-500 transition-all duration-300 gold-glow-intense hover:scale-[1.02] active:scale-[0.98] ${
     title === "TAPPY BIRD" ? "tap-wobble" : ""
   }`}

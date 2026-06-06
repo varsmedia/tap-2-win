@@ -37,6 +37,9 @@ export function BigWinnerToast() {
       })
 
       setShow(true)
+      const audio = new Audio("/cashout.mp3")
+audio.volume = 0.6
+audio.play().catch(() => {})
 
       setTimeout(() => {
         setShow(false)

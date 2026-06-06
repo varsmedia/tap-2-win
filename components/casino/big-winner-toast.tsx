@@ -9,28 +9,35 @@ function generateHiddenId() {
   return `${first}****${last}`
 }
 
+function generateAmount() {
+  return Number((Math.random() * (200 - 50) + 50).toFixed(2))
+}
+
+function generateLogo() {
+  const logos = ["/1win-logo.png", "/mostbet-logo.png"]
+  return logos[Math.floor(Math.random() * logos.length)]
+}
+
 export function BigWinnerToast() {
   const [show, setShow] = useState(false)
   const [winner, setWinner] = useState({
     id: generateHiddenId(),
-    amount: 125,
+    amount: generateAmount(),
+    logo: generateLogo(),
   })
 
   useEffect(() => {
     let timeoutId: ReturnType<typeof setTimeout>
 
     const showWinner = () => {
-      const randomAmount = Math.floor(Math.random() * (200 - 50 + 1)) + 50
-
       setWinner({
         id: generateHiddenId(),
-        amount: randomAmount,
+        amount: generateAmount(),
+        logo: generateLogo(),
       })
 
       setShow(true)
-const audio = new Audio("/cashout.mp3")
-audio.volume = 0.6
-audio.play().catch(() => {})
+
       setTimeout(() => {
         setShow(false)
       }, 4000)
@@ -53,8 +60,8 @@ audio.play().catch(() => {})
       <div className="flex items-center gap-4 rounded-2xl border border-emerald-400 bg-emerald-950/90 px-4 py-3 shadow-[0_0_25px_rgba(52,211,153,0.35)]">
         <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-emerald-400/20 overflow-hidden">
           <img
-            src="/1win-logo.png"
-            alt="Logo"
+            src={winner.logo}
+            alt="Winner Logo"
             className="h-full w-full object-cover"
           />
         </div>
@@ -64,7 +71,7 @@ audio.play().catch(() => {})
             ID: {winner.id}
           </p>
           <p className="text-lg font-black text-emerald-400 leading-tight">
-            Big Winner +${winner.amount}
+            Big Winner +${winner.amount.toFixed(2)}
           </p>
         </div>
       </div>

@@ -16,12 +16,10 @@ function generateUniqueWinners(count: number) {
     usedIds.add(id)
 
     const amount = Number((Math.random() * (25 - 5) + 5).toFixed(2))
-    const isWin = Math.random() < 0.5
 
     return {
       id,
       amount,
-      isWin,
     }
   })
 }
@@ -72,12 +70,9 @@ export function WinnerTicker() {
               </span>
 
               <span
-                className={`text-sm font-black ${
-                  item.isWin ? "text-emerald-400" : "text-red-400"
-                }`}
-              >
-                {item.isWin ? "+" : "-"}${item.amount.toFixed(2)}
-              </span>
+                <span className="text-sm font-black text-emerald-400">
+  +${item.amount.toFixed(2)}
+</span>
             </div>
           ))}
         </div>

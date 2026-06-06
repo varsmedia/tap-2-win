@@ -83,8 +83,7 @@ export function LiveStatusBar() {
   }, [])
 
   return (
-    <div className="grid grid-cols-3 items-center gap-2 px-3 py-3 bg-gradient-to-r from-[oklch(0.08_0.02_150)] via-[oklch(0.1_0.02_145)] to-[oklch(0.08_0.02_150)] border-y-2 border-emerald-500/20">
-      <div className="flex items-center gap-2 min-w-0">
+<div className="flex items-center justify-between gap-1.5 px-2 py-2 bg-gradient-to-r from-[oklch(0.08_0.02_150)] via-[oklch(0.1_0.02_145)] to-[oklch(0.08_0.02_150)] border-y-2 border-emerald-500/20">      <div className="flex items-center gap-2 min-w-0">
         <div className="relative flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-500/20 border border-emerald-500/40 shrink-0">
           <Zap className="w-4 h-4 text-emerald-400 fill-emerald-400" />
           <div className="absolute inset-0 rounded-lg bg-emerald-500/30 animate-ping" />
@@ -104,8 +103,7 @@ export function LiveStatusBar() {
 </div>
       </div>
 
-      <div className="flex items-center justify-center gap-1 px-1.5 py-1.5 rounded-md bg-[oklch(0.1_0.02_150)] border border-amber-500/20 min-w-0">
-        <Users className="w-4 h-4 text-emerald-400 shrink-0" />
+className="flex items-center justify-center gap-1 px-2 py-1 rounded-lg bg-[oklch(0.1_0.02_150)] border border-amber-500/20"        <Users className="w-4 h-4 text-emerald-400 shrink-0" />
         <div className="flex flex-col items-center min-w-0">
           <span className="text-[8px] text-zinc-500 uppercase leading-none whitespace-nowrap">
             Playing Now
@@ -116,8 +114,7 @@ export function LiveStatusBar() {
         </div>
       </div>
 
-      <div className="flex items-center justify-center gap-1 px-1.5 py-1.5 rounded-md bg-[oklch(0.1_0.02_150)] border border-amber-500/20 min-w-0">
-        <DollarSign className="w-4 h-4 text-amber-400 shrink-0" />
+className="flex items-center justify-center gap-1 px-2 py-1 rounded-lg bg-[oklch(0.1_0.02_150)] border border-amber-500/20"        <DollarSign className="w-4 h-4 text-amber-400 shrink-0" />
         <div className="flex flex-col items-center min-w-0">
           <span className="text-[8px] text-zinc-500 uppercase leading-none whitespace-nowrap">
             Won Last Hour

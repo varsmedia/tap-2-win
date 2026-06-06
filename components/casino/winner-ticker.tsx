@@ -69,10 +69,9 @@ export function WinnerTicker() {
                 ID: {item.id}***
               </span>
 
-              <span
-                <span className="text-sm font-black text-emerald-400">
-  +${item.amount.toFixed(2)}
-</span>
+              <span className="text-sm font-black text-emerald-400">
+                +${item.amount.toFixed(2)}
+              </span>
             </div>
           ))}
         </div>

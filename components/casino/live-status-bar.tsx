@@ -90,9 +90,18 @@ export function LiveStatusBar() {
           <div className="absolute inset-0 rounded-lg bg-emerald-500/30 animate-ping" />
         </div>
 
-        <span className="text-sm font-black text-white uppercase tracking-wider truncate">
-          TAP WIN
-        </span>
+        <div
+  className="font-black uppercase tracking-wider flex items-center gap-1"
+  style={{ fontFamily: "var(--font-orbitron)" }}
+>
+  <span className="text-yellow-400">TAP</span>
+
+  <span className="text-white text-base animate-pulse">
+    2
+  </span>
+
+  <span className="text-yellow-400">WIN</span>
+</div>
       </div>
 
       <div className="flex items-center justify-center gap-1.5 px-2 py-2 rounded-xl bg-[oklch(0.1_0.02_150)] border border-amber-500/20 min-w-0">

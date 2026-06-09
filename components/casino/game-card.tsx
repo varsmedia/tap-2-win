@@ -20,36 +20,43 @@ const tagStyles: Record<TagType, string> = {
   TOP: "bg-gradient-to-r from-emerald-500 to-green-500 text-white shadow-lg shadow-emerald-500/30",
 }
 
-export function GameCard({ title, tag, buttonText, imageSrc, link }: GameCardProps) {
+function seededRandom(seed: number) {
+  const x = Math.sin(seed) * 10000
+  return x - Math.floor(x)
+}
+
+function getGlobalProfit(title: string) {
+  const now = new Date()
+
+  const timeBlock = Math.floor(now.getTime() / 3000)
+
+  const titleSeed = title
+    .split("")
+    .reduce((sum, char) => sum + char.charCodeAt(0), 0)
+
+  const random = seededRandom(timeBlock + titleSeed)
+
+  return Number((10 + random * (150 - 10)).toFixed(2))
+}
+
+export function GameCard({
+  title,
+  tag,
+  buttonText,
+  imageSrc,
+  link,
+}: GameCardProps) {
   const [liveProfit, setLiveProfit] = useState(() =>
-    Number((Math.random() * (150 - 10) + 10).toFixed(2))
+    getGlobalProfit(title)
   )
 
   useEffect(() => {
-    let timeoutId: ReturnType<typeof setTimeout>
+    const interval = setInterval(() => {
+      setLiveProfit(getGlobalProfit(title))
+    }, 1000)
 
-    const updateProfit = () => {
-      setLiveProfit((prev) => {
-        const change = Number((Math.random() * (10 - 0.05) + 0.05).toFixed(2))
-        const direction = Math.random() < 0.5 ? 1 : -1
-
-        let next = prev + change * direction
-
-        if (next > 150) next = 150 - Math.random() * 10
-        if (next < 10) next = 10 + Math.random() * 10
-
-        return Number(next.toFixed(2))
-      })
-
-      const nextDelay = Math.floor(Math.random() * (5000 - 1200 + 1)) + 1200
-      timeoutId = setTimeout(updateProfit, nextDelay)
-    }
-
-    const firstDelay = Math.floor(Math.random() * (4000 - 500 + 1)) + 500
-    timeoutId = setTimeout(updateProfit, firstDelay)
-
-    return () => clearTimeout(timeoutId)
-  }, [])
+    return () => clearInterval(interval)
+  }, [title])
 
   return (
     <div className="relative group">
@@ -89,20 +96,23 @@ export function GameCard({ title, tag, buttonText, imageSrc, link }: GameCardPro
             </h3>
 
             <div className="flex items-center justify-center gap-1">
-              <span className="text-[11px] text-zinc-400">Profit:</span>
+              <span className="text-[11px] text-zinc-400">
+                Profit:
+              </span>
+
               <span className="text-xs font-black text-emerald-400 green-glow rounded px-1">
                 ${liveProfit.toFixed(2)}
               </span>
             </div>
 
             <a
-  href={link}
-  className={`mt-2 block w-full py-2.5 rounded-xl bg-gradient-to-r from-amber-600 via-yellow-500 to-amber-600 text-black text-xs font-black uppercase tracking-widest text-center hover:from-amber-500 hover:via-yellow-400 hover:to-amber-500 transition-all duration-300 gold-glow-intense hover:scale-[1.02] active:scale-[0.98] ${
-    title === "TAPPY BIRD" ? "tap-wobble" : ""
-  }`}
->
-  {buttonText}
-</a>
+              href={link}
+              className={`mt-2 block w-full py-2.5 rounded-xl bg-gradient-to-r from-amber-600 via-yellow-500 to-amber-600 text-black text-xs font-black uppercase tracking-widest text-center hover:from-amber-500 hover:via-yellow-400 hover:to-amber-500 transition-all duration-300 gold-glow-intense hover:scale-[1.02] active:scale-[0.98] ${
+                title === "TAPPY BIRD" ? "tap-wobble" : ""
+              }`}
+            >
+              {buttonText}
+            </a>
           </div>
         </div>
       </div>

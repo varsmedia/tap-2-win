@@ -3,26 +3,40 @@
 import { Users, DollarSign, Zap } from "lucide-react"
 import { useEffect, useState } from "react"
 
+function seededRandom(seed: number) {
+  const x = Math.sin(seed) * 10000
+  return x - Math.floor(x)
+}
+
+function getHourlyWonLastHour() {
+  const now = new Date()
+
+  const hourlySeed =
+    now.getUTCFullYear() * 1000000 +
+    (now.getUTCMonth() + 1) * 10000 +
+    now.getUTCDate() * 100 +
+    now.getUTCHours()
+
+  const random = seededRandom(hourlySeed)
+
+  return Number((10000 + random * (40000 - 10000)).toFixed(2))
+}
+
+function getDelayToNextHour() {
+  const now = new Date()
+  const nextHour = new Date(now)
+
+  nextHour.setUTCHours(now.getUTCHours() + 1, 0, 0, 0)
+
+  return nextHour.getTime() - now.getTime()
+}
+
 export function LiveStatusBar() {
   const [players, setPlayers] = useState(
     Math.floor(Math.random() * (500 - 200 + 1)) + 200
   )
 
-  const [wonLastHour, setWonLastHour] = useState(() => {
-    if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("wonLastHour")
-      if (saved) return Number(saved)
-
-      const initialValue = Number(
-        (Math.random() * (40000 - 10000) + 10000).toFixed(2)
-      )
-
-      localStorage.setItem("wonLastHour", String(initialValue))
-      return initialValue
-    }
-
-    return 10000
-  })
+  const [wonLastHour, setWonLastHour] = useState(getHourlyWonLastHour)
 
   useEffect(() => {
     let timeoutId: ReturnType<typeof setTimeout>
@@ -52,25 +66,16 @@ export function LiveStatusBar() {
   useEffect(() => {
     let timeoutId: ReturnType<typeof setTimeout>
 
-    const updateWonLastHour = () => {
-      setWonLastHour((prev) => {
-        const change = Number((Math.random() * (3000 - 100) + 100).toFixed(2))
-        const direction = Math.random() < 0.5 ? 1 : -1
-        let next = prev + change * direction
+    const updateAtNextHour = () => {
+      const delay = getDelayToNextHour()
 
-        if (next > 40000) next = 40000 - Math.random() * 2000
-        if (next < 10000) next = 10000 + Math.random() * 2000
-
-        const finalValue = Number(next.toFixed(2))
-        localStorage.setItem("wonLastHour", String(finalValue))
-
-        return finalValue
-      })
-
-      timeoutId = setTimeout(updateWonLastHour, 60 * 60 * 1000)
+      timeoutId = setTimeout(() => {
+        setWonLastHour(getHourlyWonLastHour())
+        updateAtNextHour()
+      }, delay)
     }
 
-    timeoutId = setTimeout(updateWonLastHour, 60 * 60 * 1000)
+    updateAtNextHour()
 
     return () => clearTimeout(timeoutId)
   }, [])

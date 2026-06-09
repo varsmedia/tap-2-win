@@ -3,19 +3,40 @@
 import { Trophy, Star } from "lucide-react"
 import { useMemo } from "react"
 
-function generateUniqueWinners(count: number) {
-  const usedIds = new Set<number>()
+function seededRandom(seed: number) {
+  const x = Math.sin(seed) * 10000
+  return x - Math.floor(x)
+}
 
-  return Array.from({ length: count }, () => {
-    let id = Math.floor(Math.random() * 900) + 100
+function getTickerSeed() {
+  const now = new Date()
+
+  // Đổi danh sách winner mỗi 5 phút
+  return (
+    now.getUTCFullYear() * 100000000 +
+    (now.getUTCMonth() + 1) * 1000000 +
+    now.getUTCDate() * 10000 +
+    now.getUTCHours() * 100 +
+    Math.floor(now.getUTCMinutes() / 5)
+  )
+}
+
+function generateGlobalWinners(count: number) {
+  const usedIds = new Set<number>()
+  const baseSeed = getTickerSeed()
+
+  return Array.from({ length: count }, (_, index) => {
+    let id = Math.floor(seededRandom(baseSeed + index * 11) * 900) + 100
 
     while (usedIds.has(id)) {
-      id = Math.floor(Math.random() * 900) + 100
+      id = Math.floor(seededRandom(baseSeed + index * 17) * 900) + 100
     }
 
     usedIds.add(id)
 
-    const amount = Number((Math.random() * (25 - 5) + 5).toFixed(2))
+    const amount = Number(
+      (5 + seededRandom(baseSeed + index * 29) * (25 - 5)).toFixed(2)
+    )
 
     return {
       id,
@@ -25,7 +46,7 @@ function generateUniqueWinners(count: number) {
 }
 
 export function WinnerTicker() {
-  const winners = useMemo(() => generateUniqueWinners(24), [])
+  const winners = useMemo(() => generateGlobalWinners(24), [])
 
   const tickerItems = [...winners, ...winners]
 

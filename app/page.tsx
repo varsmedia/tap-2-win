@@ -3,7 +3,6 @@ import { WinnerTicker } from "@/components/casino/winner-ticker"
 import { PromoBanner } from "@/components/casino/promo-banner"
 import { GameGrid } from "@/components/casino/game-grid"
 import { BigWinnerToast } from "@/components/casino/big-winner-toast"
-import { BackgroundMusic } from "@/components/casino/background-music"
 import { LinkCards } from "@/components/casino/link-cards"
 export default function CasinoLobby() {
   return (
@@ -18,7 +17,6 @@ export default function CasinoLobby() {
       </div>
 
       <BigWinnerToast />
-      <BackgroundMusic />
     </main>
   )
 }

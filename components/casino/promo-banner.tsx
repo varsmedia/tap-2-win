@@ -3,48 +3,24 @@
 import { Gift, Copy, Check, Info, X } from "lucide-react"
 import { useEffect, useState } from "react"
 
-export function PromoBanner() {
-  const promoCode = "TAPWIN88"
-  const totalTime = 3 * 60
+const promoCode = "TAPWIN88"
+const totalTime = 3 * 60
 
+function getGlobalPromoTimeLeft() {
+  const now = Math.floor(Date.now() / 1000)
+  const remaining = totalTime - (now % totalTime)
+
+  return remaining === totalTime ? totalTime : remaining
+}
+
+export function PromoBanner() {
   const [copied, setCopied] = useState(false)
   const [showBonus, setShowBonus] = useState(false)
-  const [timeLeft, setTimeLeft] = useState(() => {
-    if (typeof window !== "undefined") {
-      const savedEndTime = localStorage.getItem("promoEndTime")
-
-      if (savedEndTime) {
-        const remaining = Math.floor((Number(savedEndTime) - Date.now()) / 1000)
-
-        if (remaining > 0) {
-          return remaining
-        }
-      }
-
-      const newEndTime = Date.now() + totalTime * 1000
-      localStorage.setItem("promoEndTime", String(newEndTime))
-
-      return totalTime
-    }
-
-    return totalTime
-  })
+  const [timeLeft, setTimeLeft] = useState(getGlobalPromoTimeLeft)
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setTimeLeft(() => {
-        const savedEndTime = localStorage.getItem("promoEndTime")
-        const endTime = savedEndTime ? Number(savedEndTime) : Date.now() + totalTime * 1000
-        const remaining = Math.floor((endTime - Date.now()) / 1000)
-
-        if (remaining <= 0) {
-          const newEndTime = Date.now() + totalTime * 1000
-          localStorage.setItem("promoEndTime", String(newEndTime))
-          return totalTime
-        }
-
-        return remaining
-      })
+      setTimeLeft(getGlobalPromoTimeLeft())
     }, 1000)
 
     return () => clearInterval(interval)

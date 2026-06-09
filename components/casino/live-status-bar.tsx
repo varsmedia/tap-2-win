@@ -8,6 +8,17 @@ function seededRandom(seed: number) {
   return x - Math.floor(x)
 }
 
+function getGlobalPlayers() {
+  const now = new Date()
+
+  // Cứ mỗi 3 giây đổi một số mới
+  // Tất cả trình duyệt cùng thời điểm sẽ ra cùng một số
+  const timeBlock = Math.floor(now.getTime() / 3000)
+  const random = seededRandom(timeBlock)
+
+  return Math.floor(200 + random * 301)
+}
+
 function getHourlyWonLastHour() {
   const now = new Date()
 
@@ -32,35 +43,15 @@ function getDelayToNextHour() {
 }
 
 export function LiveStatusBar() {
-  const [players, setPlayers] = useState(
-    Math.floor(Math.random() * (500 - 200 + 1)) + 200
-  )
-
+  const [players, setPlayers] = useState(getGlobalPlayers)
   const [wonLastHour, setWonLastHour] = useState(getHourlyWonLastHour)
 
   useEffect(() => {
-    let timeoutId: ReturnType<typeof setTimeout>
+    const interval = setInterval(() => {
+      setPlayers(getGlobalPlayers())
+    }, 1000)
 
-    const updatePlayers = () => {
-      setPlayers((prev) => {
-        const change = Math.floor(Math.random() * 10) + 1
-        const direction = Math.random() < 0.5 ? 1 : -1
-        let next = direction === 1 ? prev + change : prev - Math.min(change, 5)
-
-        if (next > 500) next = 500 - Math.floor(Math.random() * 20)
-        if (next < 200) next = 200 + Math.floor(Math.random() * 20)
-
-        return next
-      })
-
-      const nextDelay = Math.floor(Math.random() * (5000 - 1200 + 1)) + 1200
-      timeoutId = setTimeout(updatePlayers, nextDelay)
-    }
-
-    const firstDelay = Math.floor(Math.random() * (4000 - 500 + 1)) + 500
-    timeoutId = setTimeout(updatePlayers, firstDelay)
-
-    return () => clearTimeout(timeoutId)
+    return () => clearInterval(interval)
   }, [])
 
   useEffect(() => {

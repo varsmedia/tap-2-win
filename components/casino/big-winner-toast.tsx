@@ -2,56 +2,63 @@
 
 import { useEffect, useState } from "react"
 
-function generateHiddenId() {
-  const first = Math.floor(Math.random() * 900) + 100
-  const last = Math.floor(Math.random() * 900) + 100
+function seededRandom(seed: number) {
+  const x = Math.sin(seed) * 10000
+  return x - Math.floor(x)
+}
+
+function generateHiddenId(seed: number) {
+  const first = Math.floor(seededRandom(seed + 11) * 900) + 100
+  const last = Math.floor(seededRandom(seed + 22) * 900) + 100
 
   return `${first}****${last}`
 }
 
-function generateAmount() {
-  return Number((Math.random() * (200 - 50) + 50).toFixed(2))
-}
+function getGlobalBigWinner() {
+  const now = Date.now()
 
-function generateLogo() {
+  // Mỗi 8 giây tạo 1 Big Winner mới giống nhau trên mọi trình duyệt
+  const block = Math.floor(now / 8000)
+
+  const amount = Number((50 + seededRandom(block + 33) * (200 - 50)).toFixed(2))
+
   const logos = ["/1win-logo.png", "/mostbet-logo.png"]
-  return logos[Math.floor(Math.random() * logos.length)]
+  const logo = logos[Math.floor(seededRandom(block + 44) * logos.length)]
+
+  return {
+    id: generateHiddenId(block),
+    amount,
+    logo,
+    block,
+  }
 }
 
 export function BigWinnerToast() {
   const [show, setShow] = useState(false)
-  const [winner, setWinner] = useState({
-    id: generateHiddenId(),
-    amount: generateAmount(),
-    logo: generateLogo(),
-  })
+  const [winner, setWinner] = useState(getGlobalBigWinner)
 
   useEffect(() => {
-    let timeoutId: ReturnType<typeof setTimeout>
+    let lastBlock = getGlobalBigWinner().block
 
-    const showWinner = () => {
-      setWinner({
-        id: generateHiddenId(),
-        amount: generateAmount(),
-        logo: generateLogo(),
-      })
+    const interval = setInterval(() => {
+      const nextWinner = getGlobalBigWinner()
 
-      setShow(true)
-      const audio = new Audio("/cashout.mp3")
-audio.volume = 0.6
-audio.play().catch(() => {})
+      if (nextWinner.block !== lastBlock) {
+        lastBlock = nextWinner.block
+        setWinner(nextWinner)
+        setShow(true)
 
-      setTimeout(() => {
-        setShow(false)
-      }, 4000)
+        const audio = new Audio("/cashout.mp3")
+        audio.volume = 0.6
+        audio.play().catch(() => {})
 
-      const nextDelay = Math.floor(Math.random() * (15000 - 7000 + 1)) + 7000
-      timeoutId = setTimeout(showWinner, nextDelay)
-    }
+        setTimeout(() => {
+          setShow(false)
+        }, 4000)
+      }
+    }, 500)
 
-    timeoutId = setTimeout(showWinner, 3000)
-
-    return () => clearTimeout(timeoutId)
+    return () => clearInterval(interval)
   }, [])
 
   return (
@@ -73,6 +80,7 @@ audio.play().catch(() => {})
           <p className="text-sm font-black text-white">
             ID: {winner.id}
           </p>
+
           <p className="text-lg font-black text-emerald-400 leading-tight">
             Big Winner +${winner.amount.toFixed(2)}
           </p>

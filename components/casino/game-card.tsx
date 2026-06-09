@@ -25,18 +25,34 @@ function seededRandom(seed: number) {
   return x - Math.floor(x)
 }
 
+function getTitleSeed(title: string) {
+  return title.split("").reduce((sum, char) => sum + char.charCodeAt(0), 0)
+}
+
 function getGlobalProfit(title: string) {
-  const now = new Date()
+  const titleSeed = getTitleSeed(title)
 
-  const timeBlock = Math.floor(now.getTime() / 3000)
+  // Mỗi game có chu kỳ khác nhau nên không đổi cùng lúc
+  const intervals = [1700, 2300, 3100, 4200]
+  const interval = intervals[titleSeed % intervals.length]
 
-  const titleSeed = title
-    .split("")
-    .reduce((sum, char) => sum + char.charCodeAt(0), 0)
+  const now = Date.now()
+  const block = Math.floor(now / interval)
 
-  const random = seededRandom(timeBlock + titleSeed)
+  let value = 80
 
-  return Number((10 + random * (150 - 10)).toFixed(2))
+  for (let i = 0; i <= block % 120; i++) {
+    const seed = titleSeed * 100000 + i
+    const change = Number((seededRandom(seed) * (10 - 0.05) + 0.05).toFixed(2))
+    const direction = seededRandom(seed + 999) < 0.5 ? 1 : -1
+
+    value = value + change * direction
+
+    if (value > 150) value = 150 - seededRandom(seed + 111) * 10
+    if (value < 10) value = 10 + seededRandom(seed + 222) * 10
+  }
+
+  return Number(value.toFixed(2))
 }
 
 export function GameCard({
@@ -46,14 +62,12 @@ export function GameCard({
   imageSrc,
   link,
 }: GameCardProps) {
-  const [liveProfit, setLiveProfit] = useState(() =>
-    getGlobalProfit(title)
-  )
+  const [liveProfit, setLiveProfit] = useState(() => getGlobalProfit(title))
 
   useEffect(() => {
     const interval = setInterval(() => {
       setLiveProfit(getGlobalProfit(title))
-    }, 1000)
+    }, 500)
 
     return () => clearInterval(interval)
   }, [title])
@@ -96,10 +110,7 @@ export function GameCard({
             </h3>
 
             <div className="flex items-center justify-center gap-1">
-              <span className="text-[11px] text-zinc-400">
-                Profit:
-              </span>
-
+              <span className="text-[11px] text-zinc-400">Profit:</span>
               <span className="text-xs font-black text-emerald-400 green-glow rounded px-1">
                 ${liveProfit.toFixed(2)}
               </span>

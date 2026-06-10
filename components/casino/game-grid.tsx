@@ -17,7 +17,7 @@ const games = [
     buttonText: "PLAY",
     imageSrc: "/tower-rush.mp4",
     profit: "+$1,890",
-    link: "https://lkvm.cc/d8c148",
+    link: "https://lkbb.cc/d8c148",
   },
   {
     title: "PLINKO",

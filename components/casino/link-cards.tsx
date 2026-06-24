@@ -4,7 +4,7 @@ export function LinkCards() {
       logo: "/1win-logo.png",
       title: "1Win – 500% Deposit Sign-Up Bonus",
       subtitle: "Code: TAPWIN88",
-      link: "https://lkmn.cc/4dfc",
+      link: "https://lkmn.cc/c218ff82",
     },
     {
       logo: "/mostbet-logo.png",

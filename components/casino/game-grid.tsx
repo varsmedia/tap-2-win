@@ -9,7 +9,7 @@ const games = [
     buttonText: "PLAY",
     imageSrc: "/tappy-bird.mp4",
     profit: "+$2,450",
-    link: "https://lkmn.cc/4dfc",
+    link: "https://lkmn.cc/c218ff82",
   },
   {
     title: "TOWER RUSH",
